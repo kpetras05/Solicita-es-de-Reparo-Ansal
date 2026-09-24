@@ -2102,6 +2102,7 @@
     <button class="tab-btn active" data-tab="painel"><span class="tab-icon">📊</span><span class="tab-label">Painel OS</span></button>
     <button class="tab-btn" data-tab="painel-sr"><span class="tab-icon">📋</span><span class="tab-label">Painel SR</span></button>
     <button class="tab-btn" data-tab="ordens"><span class="tab-icon">🗂️</span><span class="tab-label">Ordens de Serviço</span></button>
+    <button class="tab-btn" data-tab="solicitacoes"><span class="tab-icon">🛠️</span><span class="tab-label">Solicitações de Reparo</span></button>
     <button class="tab-btn" data-tab="duplicadas"><span class="tab-icon">🧬</span><span class="tab-label">Duplicadas</span></button>
     <button class="tab-btn" data-tab="solicitacoes"><span class="tab-icon">🛠️</span><span class="tab-label">Solicitações de Reparo</span></button>
     <button class="tab-btn" data-tab="gns"><span class="tab-icon">🚧</span><span class="tab-label">GNS</span></button>
@@ -3085,6 +3086,98 @@
 </div>
 
 </main>
+
+  <!-- ========================================== -->
+<!-- TELA DE SOLICITAÇÕES DE REPARO             -->
+<!-- ========================================== -->
+<div id="tela-solicitacoes" class="secao-painel" style="display: block;"> <!-- Mude para display: none se quiser que inicie escondida -->
+  
+  <div class="cabecalho-solicitacoes">
+    <h2>Solicitações de Reparo</h2>
+    <p>Registre e acompanhe as solicitações de reparo da frota.</p>
+    
+    <!-- Botões de Ação -->
+    <div class="botoes-acao">
+      <button class="btn-novo" onclick="abrirModalNovaSolicitacao()">+ Nova Solicitação</button>
+      <button class="btn-importar">📂 Importar CSV/XLSX</button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <section class="filtros-solicitacoes">
+    <select id="filtro-situacao">
+      <option value="">Situação: Todas</option>
+      <option value="Aberta">Aberta</option>
+      <option value="Atendida">Atendida</option>
+      <option value="Nao Atendida">Não atendida</option>
+      <option value="Improcedente">Improcedente</option>
+    </select>
+
+    <select id="filtro-garagem">
+      <option value="">Garagem: Todas</option>
+      <option value="Vitorino">Vitorino</option>
+      <option value="São Francisco">São Francisco</option>
+      <option value="Bandeirantes">Bandeirantes</option>
+    </select>
+
+    <input type="text" id="filtro-veiculo" placeholder="Buscar veículo (ex: 1001)...">
+  </section>
+
+  <!-- Tabela de Dados -->
+  <section class="tabela-container">
+    <table id="tabela-dados-solicitacoes">
+      <thead>
+        <tr>
+          <th>Nº Solicitação</th>
+          <th>Data</th>
+          <th>Veículo</th>
+          <th>Garagem</th>
+          <th>Descrição</th>
+          <th>Motivo</th>
+          <th>Situação</th>
+          <th>Funcionário</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="corpo-tabela-solicitacoes">
+        <!-- Exemplo de linha de dados (Isso depois será gerado pelo JavaScript) -->
+        <tr>
+          <td>#1024</td>
+          <td>24/09/2026</td>
+          <td>1001</td>
+          <td>Vitorino</td>
+          <td>Vazamento de ar na porta traseira</td>
+          <td>Mecânica</td>
+          <td><span class="badge-aberta">Aberta</span></td>
+          <td>João Silva</td>
+          <td><button>Editar</button></td>
+        </tr>
+        <tr>
+          <td>#1025</td>
+          <td>23/09/2026</td>
+          <td>2045</td>
+          <td>São Francisco</td>
+          <td>Luz de freio queimada</td>
+          <td>Elétrica</td>
+          <td><span class="badge-atendida">Atendida</span></td>
+          <td>Carlos Souza</td>
+          <td><button>Editar</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  
+  <!-- Paginação -->
+  <div class="paginacao">
+    <span>Página 1 de 1</span>
+    <select>
+      <option value="25">25</option>
+      <option selected value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
+
+</div>
 
 <!-- Frota modal -->
 <div class="modal-overlay" id="frota-modal-overlay">
