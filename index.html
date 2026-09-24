@@ -2008,6 +2008,77 @@
 </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a1a1a'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' font-family='sans-serif'%3E%F0%9F%94%A7%3C/text%3E%3C/svg%3E">
+
+  <script>
+    // 1. Simulando o seu banco de dados de solicitações
+const bancoDeSolicitacoes = [
+  { id: 1024, data: '24/09/2026', veiculo: '1001', garagem: 'Vitorino', descricao: 'Vazamento de ar', status: 'Aberta' },
+  { id: 1025, data: '24/09/2026', veiculo: '1001', garagem: 'Vitorino', descricao: 'Buzina não funciona', status: 'Aberta' },
+  { id: 1026, data: '23/09/2026', veiculo: '2045', garagem: 'São Francisco', descricao: 'Luz de freio', status: 'Atendida' },
+  { id: 1027, data: '24/09/2026', veiculo: '3010', garagem: 'Bandeirantes', descricao: 'Cadeira solta', status: 'Aberta' }
+];
+
+// 2. Função para criar os botões dos carros com problemas em aberto
+function gerarBotoesPainelSR() {
+  const containerBotoes = document.getElementById('botoes-carros-abertos');
+  containerBotoes.innerHTML = ''; // Limpa os botões antigos
+
+  // Filtra apenas as solicitações 'Abertas'
+  const abertas = bancoDeSolicitacoes.filter(sol => sol.status === 'Aberta');
+
+  // Conta quantas solicitações abertas cada carro tem
+  const contagemPorCarro = {};
+  abertas.forEach(sol => {
+    contagemPorCarro[sol.veiculo] = (contagemPorCarro[sol.veiculo] || 0) + 1;
+  });
+
+  // Cria um botão para cada carro que tem problema
+  for (const [veiculo, quantidade] of Object.entries(contagemPorCarro)) {
+    const botao = document.createElement('button');
+    botao.innerHTML = `🚍 Carro ${veiculo} <b>(${quantidade})</b>`;
+    botao.style.cssText = "padding: 10px 15px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;";
+    
+    // Quando clicar no botão, filtra a tabela
+    botao.onclick = () => filtrarTabelaPorCarro(veiculo);
+    
+    containerBotoes.appendChild(botao);
+  }
+
+  // Botão para limpar o filtro e ver todos os carros novamente
+  const btnLimpar = document.createElement('button');
+  btnLimpar.innerHTML = `🔄 Ver Todos`;
+  btnLimpar.style.cssText = "padding: 10px 15px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 14px;";
+  btnLimpar.onclick = () => filtrarTabelaPorCarro(''); // Passa vazio para mostrar todos
+  containerBotoes.appendChild(btnLimpar);
+}
+
+// 3. Função que filtra a tabela quando você clica no botão
+function filtrarTabelaPorCarro(veiculoBuscado) {
+  // Muda o valor do input de pesquisa (que criamos no passo anterior)
+  const campoBusca = document.getElementById('filtro-veiculo');
+  const campoSituacao = document.getElementById('filtro-situacao');
+  
+  if (campoBusca && campoSituacao) {
+      campoBusca.value = veiculoBuscado;
+      
+      if (veiculoBuscado !== '') {
+          campoSituacao.value = 'Aberta'; // Se clicou no botão do carro, já filtra por Aberta
+      } else {
+          campoSituacao.value = ''; // Se clicou em "Ver Todos", limpa o filtro de status
+      }
+      
+      // Aqui você chamaria a sua função de atualizar a tabela na tela
+      console.log(`Filtrando tabela para mostrar: ${veiculoBuscado === '' ? 'Todos' : veiculoBuscado}`);
+      // renderizarTabela(); // Descomente esta linha se você já tiver uma função que desenha a tabela
+  }
+}
+
+// Executa a função para criar os botões assim que a página carregar
+window.onload = () => {
+  gerarBotoesPainelSR();
+};
+  </script>
+
 </head>
 <body>
 
@@ -3090,6 +3161,43 @@
   <!-- ========================================== -->
 <!-- TELA DE SOLICITAÇÕES DE REPARO             -->
 <!-- ========================================== -->
+
+  <div id="tela-solicitacoes" class="secao-painel">
+  
+  <div class="cabecalho-solicitacoes">
+    <h2>Solicitações de Reparo</h2>
+    <p>Registre e acompanhe as solicitações de reparo da frota.</p>
+    <div class="botoes-acao">
+      <button class="btn-novo">+ Nova Solicitação</button>
+    </div>
+  </div>
+
+  <!-- 👇 COLE A PARTE 1 EXATAMENTE AQUI 👇 -->
+  <section class="painel-sr-resumo" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+    <h3>🚌 Veículos com Solicitações em Aberto</h3>
+    <p>Clique no botão do carro para ver os detalhes na tabela abaixo:</p>
+    
+    <div id="botoes-carros-abertos" style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+      <!-- Os botões vão aparecer aqui -->
+    </div>
+  </section>
+  <!-- 👆 -------------------------------- 👆 -->
+
+  <!-- Filtros -->
+  <section class="filtros-solicitacoes">
+    <select id="filtro-situacao">
+      <option value="">Situação: Todas</option>
+      <!-- ... opções de filtro ... -->
+    </select>
+    <!-- ... -->
+  </section>
+
+  <!-- Tabela de Dados -->
+  <section class="tabela-container">
+     <!-- ... a sua tabela ... -->
+  </section>
+
+</div>
 <div id="tela-solicitacoes" class="secao-painel" style="display: block;"> <!-- Mude para display: none se quiser que inicie escondida -->
   
   <div class="cabecalho-solicitacoes">
